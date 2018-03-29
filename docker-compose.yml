@@ -1,0 +1,33 @@
+version: "2"
+services:
+  datastore:
+    build: containers/datastore
+    tty: true
+
+  jupyterlab:
+    build: containers/jupyter
+    user: root
+    ports:
+      - "1088:8888"
+    volumes:
+      - "${LOCAL_PATH}:/home/jovyan/work"
+    environment:
+      NB_UID: 755
+      GRANT_SUDO: "yes"
+    command: start.sh jupyter lab --NotebookApp.token=''
+    depends_on:
+      - mysql
+      
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '1306:3306'
+    volumes_from:
+      - datastore
+    volumes: 
+      - ./config/mysql:/etc/mysql/conf.d
+      - ./containers/mysql/init:/docker-entrypoint-initdb.d
+    depends_on:
+      - datastore
