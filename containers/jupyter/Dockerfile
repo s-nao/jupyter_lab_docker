@@ -7,6 +7,7 @@ RUN pip install PyMySQL
 
 USER root
 RUN apt-get update
+RUN apt-get upgrade -y
 RUN apt-get install -y libzmq3-dev \ 
                      libtool \
                      libtool-bin \
@@ -16,8 +17,13 @@ RUN apt-get install -y libzmq3-dev \
                      automake \
                      uuid-dev 
 
+RUN apt install -y  ruby\
+                    ruby-dev
+
 RUN gem install rbczmq pry iruby
-RUN iruby register
+RUN iruby register --force
 
 USER jovyan
 RUN jupyter serverextension enable --py jupyterlab
+
+CMD ['iruby']
