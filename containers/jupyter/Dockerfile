@@ -6,24 +6,27 @@ RUN pip install jupyterlab
 RUN pip install PyMySQL
 
 USER root
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install -y libzmq3-dev \ 
-                     libtool \
-                     libtool-bin \
-                     pkg-config \
-                     build-essential \
-                     autoconf \
-                     automake \
-                     uuid-dev 
+RUN apt-get update && apt-get install -y ruby-ffi \
+                                        libzmq3-dev \ 
+                                        libtool \
+                                        libtool-bin \
+                                        pkg-config \
+                                        build-essential \
+                                        autoconf \
+                                        automake \
+                                        uuid-dev \
+                                        cmake
 
-RUN apt install -y  ruby\
-                    ruby-dev
+RUN apt-get update && apt install -y  ruby\
+                                      ruby-dev
 
-RUN gem install rbczmq pry iruby
-RUN iruby register --force
+RUN gem install iruby pry cztop
+RUN git clone https://github.com/zeromq/czmq
+RUN cd czmq && ./autogen.sh && ./configure && make && make install
 
 USER jovyan
+
+RUN iruby register --force
 RUN jupyter serverextension enable --py jupyterlab
 
 CMD ['iruby']
