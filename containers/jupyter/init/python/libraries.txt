@@ -1,0 +1,2 @@
+jupyterlab==0.31.12
+pymysql==0.7.11

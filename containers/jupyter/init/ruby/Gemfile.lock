@@ -1,0 +1,33 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bond (0.5.1)
+    coderay (1.1.2)
+    czmq-ffi-gen (0.15.0)
+      ffi (~> 1.9.10)
+    cztop (0.13.1)
+      czmq-ffi-gen (~> 0.15.0)
+    data_uri (0.1.0)
+    ffi (1.9.23)
+    iruby (0.3)
+      bond (~> 0.5)
+      data_uri (~> 0.1)
+      mimemagic (~> 0.3)
+      multi_json (~> 1.11)
+    method_source (0.9.0)
+    mimemagic (0.3.2)
+    multi_json (1.13.1)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cztop
+  iruby
+  pry
+
+BUNDLED WITH
+   1.14.6
