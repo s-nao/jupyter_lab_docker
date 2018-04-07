@@ -1,9 +1,6 @@
 FROM jupyter/datascience-notebook
 
-# ライブラリのインストール
 RUN pip install --upgrade pip
-RUN pip install jupyterlab
-RUN pip install PyMySQL
 
 USER root
 RUN apt-get update && apt-get install -y ruby-ffi \
@@ -19,14 +16,22 @@ RUN apt-get update && apt-get install -y ruby-ffi \
 
 RUN apt-get update && apt install -y  ruby\
                                       ruby-dev
+RUN gem install bundler
 
-RUN gem install iruby pry cztop
 RUN git clone https://github.com/zeromq/czmq
 RUN cd czmq && ./autogen.sh && ./configure && make && make install
 
 USER jovyan
 
-RUN iruby register --force
+ADD ./init/python/libraries.txt ./libraries.txt
+RUN pip install -r libraries.txt
+
+ADD ./init/ruby/Gemfile ./Gemfile
+ADD ./init/ruby/Gemfile.lock ./Gemfile.lock
+
+RUN bundle install --path=vendor/bundle
+
+RUN bundle exec iruby register --force
 RUN jupyter serverextension enable --py jupyterlab
 
-CMD ['iruby']
+CMD ['bundle exec iruby']

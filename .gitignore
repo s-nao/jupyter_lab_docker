@@ -1,2 +1,10 @@
+# editor
+.vscode
+.idea
+
 # workspace
 notebooks/*
+
+# libraries
+containers/jupyter/init/ruby/.bundle
+containers/jupyter/init/ruby/vendor
