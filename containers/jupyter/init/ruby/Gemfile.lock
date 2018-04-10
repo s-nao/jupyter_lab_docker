@@ -1,12 +1,16 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    backports (3.11.1)
     bond (0.5.1)
     coderay (1.1.2)
     czmq-ffi-gen (0.15.0)
       ffi (~> 1.9.10)
     cztop (0.13.1)
       czmq-ffi-gen (~> 0.15.0)
+    daru (0.2.0)
+      backports
+      packable (~> 1.3.9)
     data_uri (0.1.0)
     ffi (1.9.23)
     iruby (0.3)
@@ -17,6 +21,8 @@ GEM
     method_source (0.9.0)
     mimemagic (0.3.2)
     multi_json (1.13.1)
+    packable (1.3.9)
+      backports
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -26,6 +32,7 @@ PLATFORMS
 
 DEPENDENCIES
   cztop
+  daru
   iruby
   pry
 
