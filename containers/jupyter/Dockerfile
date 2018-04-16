@@ -3,7 +3,7 @@ FROM jupyter/datascience-notebook
 RUN pip install --upgrade pip
 
 USER root
-RUN apt-get update && apt-get install -y ruby-ffi \
+RUN apt-get update && apt-get install -y libffi-dev \
                                         libzmq3-dev \ 
                                         libtool \
                                         libtool-bin \
@@ -12,11 +12,22 @@ RUN apt-get update && apt-get install -y ruby-ffi \
                                         autoconf \
                                         automake \
                                         uuid-dev \
-                                        cmake
+                                        cmake \
+                                        git
 
-RUN apt-get update && apt install -y  ruby\
-                                      ruby-dev
-RUN gem install bundler
+RUN apt-get update && apt-get install -y libssl-dev \
+                                        libreadline-dev \
+                                        zlib1g-dev
+
+RUN git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+RUN echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile
+RUN echo 'eval "$(rbenv init -)"' >> ~/.profile
+RUN git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+RUN ~/.rbenv/bin/rbenv install 2.4.1
+RUN ~/.rbenv/bin/rbenv global 2.4.1
+RUN ~/.rbenv/bin/rbenv rehash
+RUN ~/.rbenv/shims/gem install bundler
 
 RUN git clone https://github.com/zeromq/czmq
 RUN cd czmq && ./autogen.sh && ./configure && make && make install
@@ -29,9 +40,9 @@ RUN pip install -r libraries.txt
 ADD ./init/ruby/Gemfile ./Gemfile
 ADD ./init/ruby/Gemfile.lock ./Gemfile.lock
 
-RUN bundle install --path=vendor/bundle
+RUN ~/.rbenv/shims/bundle install --path=vendor/bundle
 
-RUN bundle exec iruby register --force
+RUN ~/.rbenv/shims/bundle exec iruby register --force
 RUN jupyter serverextension enable --py jupyterlab
 
-CMD ['bundle exec iruby']
+CMD ['~/.rbenv/shims/bundle','exec','iruby']
